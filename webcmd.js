@@ -12,6 +12,10 @@ var WebCmd = new function(){
 
     var opts = {
         pre: 'cmd',
+        welcome: ' -------------------------------<br/>'+
+                 ' &nbsp;webcmd v1.0<br/>'+
+                 ' &nbsp;type \'help\' for more<br/>'+
+                 ' -------------------------------',
         waitstr: '[ Please wait... ]',
         routes: []
     };
@@ -38,8 +42,6 @@ var WebCmd = new function(){
 
         $(".cmd[cur='1']").live({
             "keydown": function(e){
-
-                console.log(opts)
 
                 switch(e.which || e.keyCode){
 
@@ -159,7 +161,6 @@ var WebCmd = new function(){
         });
     };
 
-
     var stopProp = function (event){
         try{
             event.stopPropagation();
@@ -168,9 +169,14 @@ var WebCmd = new function(){
         }
         return false;
     };
+    var showWelcome =function(){
+        $mainIn.html('<div class="welcome">'+opts.welcome+'</div>');
+    };
 
     this.init = function(opt){
         initOptions(opt);
+
+        showWelcome();
 
         that.newLine();
         _resize();

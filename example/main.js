@@ -3,9 +3,19 @@ $(function(){
    var testCancelTid = null;
 
    WebCmd.init({
+       //welcome: "type 'help' for more",
        //pre : 'cmd',
        //waitstr : '[ please wait ...]',
        routes: [{
+           regex: /help/,
+           handler: function(cmd, matchArr, thiz){
+               thiz.output('Usage: <br/>'
+               +'1. fetch &lt;fileName&gt;<br/>'
+               +'2. test cancel<br/>'
+               +'3. &lt;any cmd&gt;; //end with ;');
+               thiz.newLine();
+           }
+       },{
            regex: /^fetch\s+(\w+)/,
            handler: function(cmd, matchArr, thiz){
 
@@ -20,7 +30,7 @@ $(function(){
            regex: /^test\s+cancel/,
            handler: function(cmd, matchArr, thiz){
 
-               thiz.wait("type 'ctrl+c to cancel in 10 seconds...");
+               thiz.wait("type 'ctrl+c' to cancel in 10 seconds...");
 
                testCancelTid = window.setTimeout(function(){
                    thiz.output('not yet');
