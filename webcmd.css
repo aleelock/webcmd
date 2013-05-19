@@ -1,0 +1,13 @@
+
+html,body{margin:0;padding:0;height:100%;overflow:hidden; }
+body{font-size:13px;background:#000;color:#33cc00;
+    font-family: "Verdana","Consolas","Monaco","Lucida Console","文泉驿等宽微米黑","Arial";}
+
+.mainin{overflow:auto;margin-bottom:50px;}
+
+.line{overflow:auto;}
+.preline{float:left;display:block; min-width:30px;height:18px;line-height:18px; text-align:right;}
+.cmd,
+.output{float:left; display: block; min-height:18px; line-height:18px;outline:0; }
+.output{color:#ccc;}
+._lockwait{padding-left:4px;}
