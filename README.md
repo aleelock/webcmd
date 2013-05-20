@@ -5,31 +5,25 @@ webcmd
 
 WebCmd defined as singleton.
 
-1. init method:
-/**
-* @param {object} options
-*   options should be a json object, with fields bellow:
-*    title        --line title, default: "cmd"
-*    welcomeMsg   --text display when you get in
-*    waitingMsg   --waiting message, default: "[ please wait... ]"
-*    routes       --json object, with fields bellow:
-*                   regex:
-*                   handler: function(cmd, matchArr, thiz)
-*                   oncancel: function(thiz)   optional
-*/
-WebCmd.init(options)
+init method:
+
+1. WebCmd.init(options)
+  options should be a json object, with fields bellow:
+    title        --line title, default: "cmd"
+    welcomeMsg   --text display when you get in
+    waitingMsg   --waiting message, default: "[ please wait... ]"
+    routes       --json object, with fields bellow:
+                   regex:
+                   handler: function(cmd, matchArr, thiz)
+                   oncancel: function(thiz)   optional
+
+
 
 2. WebCmd.output(str)
+ 
+3. WebCmd.newLine(title)  title {string} :  optional 
 
-/**
-* @param {string} title:  optional
-*/
-3. WebCmd.newLine(title)
-
-/**
-* @param {string} waitingMsg: optional, apply once only
-*/
-4. WebCmd.wait(waitingMsg)
+4. WebCmd.wait(waitingMsg)  waitingMsg {string}: optional, apply once only
 
 5. WebCmd.stopWaiting()
 
