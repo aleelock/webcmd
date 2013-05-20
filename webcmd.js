@@ -11,12 +11,12 @@ var WebCmd = new function(){
     var curRoute = -1;
 
     var opts = {
-        pre: 'cmd',
-        welcome: ' -------------------------------<br/>'+
+        title: 'cmd',
+        welcomeMsg: ' -------------------------------<br/>'+
                  ' &nbsp;webcmd v1.0<br/>'+
                  ' &nbsp;type \'help\' for more<br/>'+
                  ' -------------------------------',
-        waitstr: '[ Please wait... ]',
+        waitingMsg: '[ Please wait... ]',
         routes: []
     };
 
@@ -169,14 +169,14 @@ var WebCmd = new function(){
         }
         return false;
     };
-    var showWelcome =function(){
-        $mainIn.html('<div class="welcome">'+opts.welcome+'</div>');
+    var showWelcomeMsg =function(){
+        $mainIn.html('<div class="welcome">'+opts.welcomeMsg+'</div>');
     };
 
     this.init = function(opt){
         initOptions(opt);
 
-        showWelcome();
+        showWelcomeMsg();
 
         that.newLine();
         _resize();
@@ -196,12 +196,12 @@ var WebCmd = new function(){
         that.newLine();
     };
 
-    this.newLine = function(pre){
-        if(pre) opts.pre = pre;
-        that.uwait();
+    this.newLine = function(title){
+        if(title) opts.title = title;
+        that.stopWaiting();
         $(".cmd").attr({contentEditable:false, cur:0});
         $("<div class='line'>" +
-            "<div class='preline'>" + opts.pre +  "&gt;&nbsp;</div>" +
+            "<div class='preline'>" + opts.title +  "&gt;&nbsp;</div>" +
             "<div class='cmd' cur='1' contentEditable='true'> </div>" +
             "</div>")
             .appendTo($mainIn);
@@ -211,7 +211,7 @@ var WebCmd = new function(){
     };
 
     this.output = function(s){
-        that.uwait();
+        that.stopWaiting();
         $(".cmd").attr({contentEditable:false, cur:0});
         $("<div class='line'>" +
             "<div class='preline'> -&gt;&nbsp;</div>" +
@@ -223,13 +223,13 @@ var WebCmd = new function(){
     this.wait  = function(s){
         isWaiting = true;
         if(s==null){
-            s = opts.waitstr;
+            s = opts.waitingMsg;
         }
         $(".cmd[cur='1']").attr({contentEditable:false, cur:0});
         $mainIn.append("<span class='_lockwait'> "+s+" </span>")
             .attr({contentEditable:false});
     };
-    this.uwait = function(){
+    this.stopWaiting = function(){
         isWaiting = false;
         $('._lockwait').remove();
     };

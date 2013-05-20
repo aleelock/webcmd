@@ -3,9 +3,9 @@ $(function(){
    var testCancelTid = null;
 
    WebCmd.init({
-       //welcome: "type 'help' for more",
-       //pre : 'cmd',
-       //waitstr : '[ please wait ...]',
+       //title : 'cmd',
+       //welcomeMsg: "type 'help' for more",
+       //waitingMsg : '[ please wait ...]',
        routes: [{
            regex: /help/,
            handler: function(cmd, matchArr, thiz){
@@ -45,16 +45,15 @@ $(function(){
            handler: function(cmd, matchArr, thiz){
                //console.log(cmd, arr, 2)
 
-               thiz.wait(null);
+               thiz.wait();
                window.setTimeout(function(){
 
                    thiz.output('done');
                    thiz.newLine();
                }, 1000);
 
-               //thiz.output(str,'abc');
+               //thiz.output(str);
                //thiz.newLine('newcmd');
-               //thiz.wait();
                //thiz.clear();
                //thiz.cancel();
            }
