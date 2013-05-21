@@ -3,16 +3,16 @@ webcmd
 
 一个web版的命令行界面
 
-WebCmd defined as singleton.
+WebCmd is defined as a singleton.
 
 init method:
 
 1. WebCmd.init(options)
-  options should be a json object, with fields bellow:
+  options is a json object, with the fields bellow:
     title        --line title, default: "cmd"
     welcomeMsg   --text display when you get in
     waitingMsg   --waiting message, default: "[ please wait... ]"
-    routes       --json object, with fields bellow:
+    routes       --json object, with the fields bellow:
                    regex:
                    handler: function(cmd, matchArr, thiz)
                    oncancel: function(thiz)   optional
