@@ -6,6 +6,8 @@ var WebCmd = new function(){
     var cache = [""];
     var cur = 0;
 
+
+
     var isWaiting =false;
 
     var curRoute = -1;
@@ -30,7 +32,7 @@ var WebCmd = new function(){
         $w = $(window);
         $doc = $(document);
 
-        $('body').html('');
+        //$('body').html('');
         $main = $('<div class="main"></div>').appendTo('body');
         $main.css({overflow:'auto', background:'#000'});
         $mainIn = $('<div class="mainin"></div>').appendTo($main);
@@ -51,9 +53,6 @@ var WebCmd = new function(){
                         var origStr = $.trim($(".cmd[cur='1']").text());
                         var cmdstr = unescape(escape(origStr).replace(/\%20\%A0/g,"%20%20"));
 
-                        cache.splice(cache.length-1, 0, cmdstr);
-                        cur = cache.length-1;
-                        //cmdstr = cmdstr.replace(/;*$/,'');
 
                         if(cmdstr.length==0){
                             that.newLine();
@@ -67,14 +66,19 @@ var WebCmd = new function(){
                             if(arr!=null){
                                 curRoute = i;
                                 opts.routes[i].handler(cmdstr, arr, that);
+
+                                addCmd2Cache(cmdstr);
+
                                 stopProp(e);
                                 return false;
                             }
                         }
-                        console.log(123)
 
                         if(cmdstr.indexOf("clear")==0){
                             that.clear();
+
+                            addCmd2Cache(cmdstr);
+
                             stopProp(e);
                             return false;
                         }
@@ -87,7 +91,9 @@ var WebCmd = new function(){
                             else cur--;
                             $(".cmd[cur='1']").text(cache[cur]);
                         }
+
                         stopProp(e);
+                        focusLineEnd();
                         return false;
                      break;
                     //down
@@ -98,6 +104,7 @@ var WebCmd = new function(){
                             $(".cmd[cur='1']").text(cache[cur]);
                         }
                         stopProp(e);
+                        focusLineEnd();
                         return false;
                     break;
                 }
@@ -119,6 +126,10 @@ var WebCmd = new function(){
                     opts.routes[curRoute].oncancel(that);
                     stopProp(e);
                     return false;
+                }else if( key==38 || key == 40){
+                    toEnd();
+                    focusLineEnd();
+                    return false;
                 }
                 return true;
             },
@@ -128,7 +139,9 @@ var WebCmd = new function(){
             },
             'mouseup': function(){
                 if(isclick){
-                    focusLineEnd();
+                    if($('.cmd[cur=1]').offset().top < $main.scrollTop() + $(document).height()){
+                       focusLineEnd();
+                    }
                 }
             }
         });
@@ -150,14 +163,20 @@ var WebCmd = new function(){
     function _resize(){
         $main.css({width:$w.width(), height:$w.height()});
         $(".cmd",".output").each(function(i, n){
-            $(this).width($main.width()-$(this).prev('.preline').width()-10);
+            $(this).width($main.width()-$(this).prev('.preline').width()-30);
         });
+    };
+
+    var addCmd2Cache = function(cmd){
+        cache.splice(cache.length-1, 0, cmd);
+        cur = cache.length-1;
     };
 
     var toEnd = function(){
         $main.scrollTop($main[0].scrollHeight);
+
         $(".cmd[cur='1']:last, .output[cur='1']:last").each(function(i, n){
-            $(this).width($main.width()-$(this).prev('.preline').width()-10);
+            $(this).width($main.width()-$(this).prev('.preline').width()-30);
         });
     };
 
@@ -199,7 +218,7 @@ var WebCmd = new function(){
     this.newLine = function(title){
         if(title) opts.title = title;
         that.stopWaiting();
-        $(".cmd").attr({contentEditable:false, cur:0});
+        $(".cmd:last").attr({contentEditable:false, cur:0});
         $("<div class='line'>" +
             "<div class='preline'>" + opts.title +  "&gt;&nbsp;</div>" +
             "<div class='cmd' cur='1' contentEditable='true'> </div>" +
@@ -212,7 +231,7 @@ var WebCmd = new function(){
 
     this.output = function(s){
         that.stopWaiting();
-        $(".cmd").attr({contentEditable:false, cur:0});
+        $(".cmd:last").attr({contentEditable:false, cur:0});
         $("<div class='line'>" +
             "<div class='preline'> -&gt;&nbsp;</div>" +
             "<div class='output' cur='1'>"+s+"</div>" +
@@ -225,9 +244,9 @@ var WebCmd = new function(){
         if(s==null){
             s = opts.waitingMsg;
         }
-        $(".cmd[cur='1']").attr({contentEditable:false, cur:0});
-        $mainIn.append("<span class='_lockwait'> "+s+" </span>")
-            .attr({contentEditable:false});
+
+        $(".cmd:last").append("<span class='_lockwait'> "+s+" </span>")
+            .attr({contentEditable: false, cur:0});
     };
     this.stopWaiting = function(){
         isWaiting = false;

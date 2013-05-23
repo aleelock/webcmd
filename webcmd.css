@@ -10,4 +10,4 @@ body{font-size:13px;background:#000;color:#33cc00;
 .cmd,
 .output{float:left; display: block; min-height:18px; line-height:18px;outline:0; }
 .output{color:#ccc;}
-._lockwait{padding-left:4px;}
+._lockwait{ padding-left:4px;}
