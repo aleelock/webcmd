@@ -50,7 +50,7 @@ var WebCmd = new function(){
                     //enter
                     case 13:
 
-                        var origStr = $.trim($(".cmd[cur='1']").text());
+                        var origStr = $.trim($(".cmd[cur='1']").size()>0?$(".cmd[cur='1']")[0].innerText:'');
                         var cmdstr = unescape(escape(origStr).replace(/\%20\%A0/g,"%20%20"));
 
 
@@ -133,13 +133,17 @@ var WebCmd = new function(){
                 }
                 return true;
             },
-            'mousedown': function(){
+            'mousedown': function(e){
+                if(e.shiftKey){
+                    return true;
+                }
                 isclick = true;
                 window.setTimeout(function(){ isclick = false; },500);
             },
             'mouseup': function(){
                 if(isclick){
-                    if($('.cmd[cur=1]').offset().top < $main.scrollTop() + $(document).height()){
+                    if($('.cmd[cur=1]').size()>0
+                    && $('.cmd[cur=1]')[0].offsetTop < $main[0].scrollTop + document.body.clientHeight){
                        focusLineEnd();
                     }
                 }
@@ -162,7 +166,7 @@ var WebCmd = new function(){
     };
     function _resize(){
         $main.css({width:$w.width(), height:$w.height()});
-        $(".cmd",".output").each(function(i, n){
+        $(".cmd, .output").each(function(i, n){
             $(this).width($main.width()-$(this).prev('.preline').width()-30);
         });
     };
