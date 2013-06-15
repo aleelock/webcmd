@@ -37,22 +37,22 @@ var WebCmd = new function(){
         $main.css({overflow:'auto', background:'#000'});
         $mainIn = $('<div class="mainin"></div>').appendTo($main);
     };
+    var initCmdEvents = function(){
 
-    var initEvents = function(){
-
-        $w.resize(_resize);
-
-        $(".cmd[cur='1']").live({
+        $(".cmd[cur='1']").on({
             "keydown": function(e){
 
                 switch(e.which || e.keyCode){
 
                     //enter
                     case 13:
+                        var origStr = '';
+                        if($(".cmd[cur='1']").size()>0){
+                            var curDom = $(".cmd[cur='1']")[0];
+                            origStr = $.trim(curDom.innerText ? curDom.innerText : curDom.textContent);
+                        }
 
-                        var origStr = $.trim($(".cmd[cur='1']").size()>0?$(".cmd[cur='1']")[0].innerText:'');
                         var cmdstr = unescape(escape(origStr).replace(/\%20\%A0/g,"%20%20"));
-
 
                         if(cmdstr.length==0){
                             that.newLine();
@@ -82,7 +82,7 @@ var WebCmd = new function(){
                             stopProp(e);
                             return false;
                         }
-                    break;
+                        break;
 
                     //up
                     case 38 :
@@ -95,7 +95,7 @@ var WebCmd = new function(){
                         stopProp(e);
                         focusLineEnd();
                         return false;
-                     break;
+                        break;
                     //down
                     case 40 :
                         if(cache && cache.length>0){
@@ -106,14 +106,17 @@ var WebCmd = new function(){
                         stopProp(e);
                         focusLineEnd();
                         return false;
-                    break;
+                        break;
                 }
             },
             'mouseup': function(){
                 return false;
             }
         });
+    };
+    var initDocEvents = function(){
 
+        $w.resize(_resize);
 
         var isclick = false;
         $doc.bind({
@@ -204,7 +207,7 @@ var WebCmd = new function(){
         that.newLine();
         _resize();
 
-        initEvents();
+        initDocEvents();
 
         return this;
     };
@@ -231,6 +234,7 @@ var WebCmd = new function(){
 
         toEnd();
         $(".cmd[cur='1']").focus();
+        initCmdEvents();
     };
 
     this.output = function(s){
